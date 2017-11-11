@@ -21,7 +21,6 @@
     "prettier": "^1.7.4"
   },
   "dependencies": {
-    "pify": "^3.0.0",
-    "thunkify": "^2.1.2"
+    "pify": "^3.0.0"
   }
 }

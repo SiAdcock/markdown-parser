@@ -9,7 +9,7 @@ const write = pify(fs.writeFile);
 const mkdir = pify(fs.mkdir);
 const access = pify(fs.access);
 
-const buildTrees = async function buildTree(markdownFile) {
+const buildTree = async function buildTree(markdownFile) {
     const content = await read(markdownFile, 'utf-8');
     const lines = content.split('\n');
     const basename = path.basename(markdownFile, '.md');
@@ -25,6 +25,14 @@ const buildTrees = async function buildTree(markdownFile) {
             return acc;
         }, []),
     };
+};
+
+const buildTrees = async function buildTrees(...markdownFiles) {
+    return markdownFiles.reduce(async function(acc, file) {
+        const currentTree = await buildTree(file);
+
+        return Object.assign({}, acc, currentTree);
+    }, {});
 };
 
 const generateHtml = async function generateHtml(trees) {
@@ -52,4 +60,7 @@ const generateHtml = async function generateHtml(trees) {
     });
 };
 
-buildTrees(path.join('markdown', 'index.md')).then(generateHtml);
+buildTrees(
+    path.join('markdown', 'index.md'),
+    path.join('markdown', 'index2.md')
+).then(generateHtml);

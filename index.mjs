@@ -9,34 +9,47 @@ const write = pify(fs.writeFile);
 const mkdir = pify(fs.mkdir);
 const access = pify(fs.access);
 
-const buildTree = async function buildTree() {
-    const content = await read(path.join('markdown', 'index.md'), 'utf-8');
+const buildTrees = async function buildTree(markdownFile) {
+    const content = await read(markdownFile, 'utf-8');
     const lines = content.split('\n');
+    const basename = path.basename(markdownFile, '.md');
 
-    return lines.reduce((acc, line) => {
-        if (line.startsWith('# ')) {
-            acc.push({
-                h1: line.split('# ')[1],
-            });
-        }
+    return {
+        [basename]: lines.reduce((acc, line) => {
+            if (line.startsWith('# ')) {
+                acc.push({
+                    h1: line.split('# ')[1],
+                });
+            }
 
-        return acc;
-    }, []);
+            return acc;
+        }, []),
+    };
 };
 
-const generateHtml = async function generateHtml(tree) {
-    const filePath = path.join('dist', 'index.html');
-    const lines = tree.reduce((acc, line) => {
-        if (line.h1) {
-            acc.push(`<h1>${line.h1}</h1>`);
-        }
+const generateHtml = async function generateHtml(trees) {
+    const htmlStrMap = Object.keys(trees).reduce((treesAcc, tree) => {
+        const htmlString = trees[tree]
+            .reduce((acc, line) => {
+                if (line.h1) {
+                    acc.push(`<h1>${line.h1}</h1>`);
+                }
 
-        return acc;
-    }, []);
+                return acc;
+            }, [])
+            .join('\n');
+
+        return Object.assign({}, treesAcc, { [tree]: htmlString });
+    }, {});
 
     await access('dist').catch(() => mkdir('dist'));
-    fs.createWriteStream(filePath);
-    write(filePath, lines.join('\n'));
+
+    Object.keys(htmlStrMap).forEach(filename => {
+        const filePath = path.join('dist', `${filename}.html`);
+
+        fs.createWriteStream(filePath);
+        write(filePath, htmlStrMap[filename]);
+    });
 };
 
-buildTree().then(tree => generateHtml(tree));
+buildTrees(path.join('markdown', 'index.md')).then(generateHtml);

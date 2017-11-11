@@ -28,11 +28,16 @@ const buildTree = async function buildTree(markdownFile) {
 };
 
 const buildTrees = async function buildTrees(...markdownFiles) {
-    return markdownFiles.reduce(async function(acc, file) {
+    // eslint-disable-next-line prefer-arrow-callback
+    return markdownFiles.reduce(async function constructTreesFromFiles(
+        acc,
+        file
+    ) {
         const currentTree = await buildTree(file);
 
         return Object.assign({}, acc, currentTree);
-    }, {});
+    },
+    {});
 };
 
 const generateHtml = async function generateHtml(trees) {

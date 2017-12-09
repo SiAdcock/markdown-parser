@@ -7,4 +7,6 @@ import generateHtml from './src/html.mjs';
 buildBlocksMap(
     path.join('markdown', 'index.md'),
     path.join('markdown', 'index2.md')
-).then(generateHtml);
+).then(blocksMap => {
+    generateHtml(blocksMap);
+});

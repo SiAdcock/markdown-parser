@@ -15,6 +15,10 @@ const buildBlocks = async function buildTree(markdownFile) {
                 acc.push({
                     h1: line.split('# ')[1],
                 });
+            } else if (line.startsWith('## ')) {
+                acc.push({
+                    h2: line.split('## ')[1],
+                });
             }
 
             return acc;
@@ -23,16 +27,11 @@ const buildBlocks = async function buildTree(markdownFile) {
 };
 
 const buildBlocksMap = async function buildBlocksMap(...markdownFiles) {
-    // eslint-disable-next-line prefer-arrow-callback
-    return markdownFiles.reduce(async function constructBlockMapFromFiles(
-        acc,
-        file
-    ) {
-        const currentBlocks = await buildBlocks(file);
-
-        return Object.assign({}, acc, currentBlocks);
-    },
-    {});
+    return Promise.all(
+        markdownFiles.map(async mdFile => buildBlocks(mdFile))
+    ).then(blocks =>
+        blocks.reduce((acc, block) => Object.assign({}, acc, block), {})
+    );
 };
 
 export default buildBlocksMap;

@@ -22,7 +22,7 @@ const buildBlocks = async function buildTree(markdownFile) {
     };
 };
 
-const buildBlockMap = async function buildBlockMap(...markdownFiles) {
+const buildBlocksMap = async function buildBlocksMap(...markdownFiles) {
     // eslint-disable-next-line prefer-arrow-callback
     return markdownFiles.reduce(async function constructBlockMapFromFiles(
         acc,
@@ -35,4 +35,4 @@ const buildBlockMap = async function buildBlockMap(...markdownFiles) {
     {});
 };
 
-export default buildBlockMap;
+export default buildBlocksMap;

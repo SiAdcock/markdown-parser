@@ -6,9 +6,9 @@ const write = pify(fs.writeFile);
 const mkdir = pify(fs.mkdir);
 const access = pify(fs.access);
 
-const generateHtml = async function generateHtml(trees) {
-    const htmlStrMap = Object.keys(trees).reduce((treesAcc, tree) => {
-        const htmlString = trees[tree]
+const generateHtml = async function generateHtml(blocksMap) {
+    const htmlStrMap = Object.keys(blocksMap).reduce((blocksAcc, blocks) => {
+        const htmlString = blocksMap[blocks]
             .reduce((acc, line) => {
                 if (line.h1) {
                     acc.push(`<h1>${line.h1}</h1>`);
@@ -18,7 +18,7 @@ const generateHtml = async function generateHtml(trees) {
             }, [])
             .join('\n');
 
-        return Object.assign({}, treesAcc, { [tree]: htmlString });
+        return Object.assign({}, blocksAcc, { [blocks]: htmlString });
     }, {});
 
     await access('dist').catch(() => mkdir('dist'));

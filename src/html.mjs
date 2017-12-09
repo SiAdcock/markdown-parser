@@ -12,6 +12,8 @@ const generateHtml = async function generateHtml(blocksMap) {
             .reduce((acc, line) => {
                 if (line.h1) {
                     acc.push(`<h1>${line.h1}</h1>`);
+                } else if (line.h2) {
+                    acc.push(`<h2>${line.h2}</h2>`);
                 }
 
                 return acc;

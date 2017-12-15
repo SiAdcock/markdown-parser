@@ -1,28 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import pify from 'pify';
+import parse from './parse.mjs';
 
 const read = pify(fs.readFile);
-
-const buildBlock = line => {
-    if (line.startsWith('# ')) {
-        return {
-            element: 'h1',
-            child: line.split('# ')[1],
-        };
-    } else if (line.startsWith('## ')) {
-        return {
-            element: 'h2',
-            child: line.split('## ')[1],
-        };
-    }
-
-    // invalid markdown
-    return {
-        element: 'unknown',
-        child: line,
-    };
-};
 
 const buildBlocks = async function buildTree(markdownFile) {
     const content = await read(markdownFile, 'utf-8');
@@ -31,7 +12,7 @@ const buildBlocks = async function buildTree(markdownFile) {
 
     return {
         [basename]: lines.reduce((acc, line) => {
-            acc.push(buildBlock(line));
+            acc.push(parse(line));
 
             return acc;
         }, []),

@@ -1,14 +1,20 @@
+import dictionary from './dictionary.mjs';
+
 const parse = line => {
-    if (line.startsWith('# ')) {
-        return {
-            element: 'h1',
-            child: line.split('# ')[1],
-        };
-    } else if (line.startsWith('## ')) {
-        return {
-            element: 'h2',
-            child: line.split('## ')[1],
-        };
+    const parsedBlock = dictionary.reduce((block, entry) => {
+        if (block) {
+            return block;
+        }
+
+        if (entry.matcher(line)) {
+            return entry.parse(line);
+        }
+
+        return null;
+    }, null);
+
+    if (parsedBlock) {
+        return parsedBlock;
     }
 
     // invalid markdown

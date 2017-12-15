@@ -9,14 +9,14 @@ const access = pify(fs.access);
 const generateHtml = async function generateHtml(blocksMap) {
     const htmlStrMap = Object.keys(blocksMap).reduce((blocksAcc, blocks) => {
         const htmlString = blocksMap[blocks]
-            .reduce((acc, line) => {
-                if (line.h1) {
-                    acc.push(`<h1>${line.h1}</h1>`);
-                } else if (line.h2) {
-                    acc.push(`<h2>${line.h2}</h2>`);
+            .reduce((htmlArray, block) => {
+                if (block.element === 'h1') {
+                    htmlArray.push(`<h1>${block.child}</h1>`);
+                } else if (block.element === 'h2') {
+                    htmlArray.push(`<h2>${block.child}</h2>`);
                 }
 
-                return acc;
+                return htmlArray;
             }, [])
             .join('\n');
 

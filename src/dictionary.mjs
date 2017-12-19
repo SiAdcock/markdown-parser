@@ -1,6 +1,6 @@
 export default [
     {
-        element: 'h1',
+        name: 'h1',
         matcher(line) {
             return line.startsWith('# ');
         },
@@ -15,7 +15,7 @@ export default [
         },
     },
     {
-        element: 'h2',
+        name: 'h2',
         matcher(line) {
             return line.startsWith('## ');
         },
@@ -26,7 +26,7 @@ export default [
             };
         },
         transform(block) {
-            return `<h1>${block.child}</h1>`;
+            return `<h2>${block.child}</h2>`;
         },
     },
 ];

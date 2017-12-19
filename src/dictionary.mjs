@@ -44,4 +44,20 @@ export default [
             return `<h3>${block.child}</h3>`;
         },
     },
+    {
+        name: 'block-quote',
+        matcher(line) {
+            return line.startsWith('> ');
+        },
+        parse(line) {
+            return {
+                element: 'block-quote',
+                child: line.split('> ')[1],
+            };
+        },
+        transform(block) {
+            return `<div class="block-quote">${block.child}</div>`;
+        },
+    },
+
 ];

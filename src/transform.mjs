@@ -17,8 +17,8 @@ const transform = block => {
         return transformedHtmlString;
     }
 
-    // unknown element
-    return block.child;
+    // raw text block
+    return block.children;
 };
 
 export default transform;

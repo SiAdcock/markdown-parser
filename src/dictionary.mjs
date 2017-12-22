@@ -7,11 +7,11 @@ export default [
         parse(line) {
             return {
                 element: 'h1',
-                child: line.split('# ')[1],
+                children: line.split('# ')[1],
             };
         },
         transform(block) {
-            return `<h1>${block.child}</h1>`;
+            return `<h1>${block.children}</h1>`;
         },
     },
     {
@@ -22,11 +22,11 @@ export default [
         parse(line) {
             return {
                 element: 'h2',
-                child: line.split('## ')[1],
+                children: line.split('## ')[1],
             };
         },
         transform(block) {
-            return `<h2>${block.child}</h2>`;
+            return `<h2>${block.children}</h2>`;
         },
     },
     {
@@ -37,11 +37,11 @@ export default [
         parse(line) {
             return {
                 element: 'h3',
-                child: line.split('### ')[1],
+                children: line.split('### ')[1],
             };
         },
         transform(block) {
-            return `<h3>${block.child}</h3>`;
+            return `<h3>${block.children}</h3>`;
         },
     },
     {
@@ -52,11 +52,11 @@ export default [
         parse(line) {
             return {
                 element: 'block-quote',
-                child: line.split('> ')[1],
+                children: line.split('> ')[1],
             };
         },
         transform(block) {
-            return `<div class="block-quote">${block.child}</div>`;
+            return `<div class="block-quote">${block.children}</div>`;
         },
     },
 
